@@ -7,7 +7,6 @@ namespace XGraphQL\Utils;
 use GraphQL\Language\AST\FieldNode;
 use GraphQL\Language\AST\FragmentDefinitionNode;
 use GraphQL\Language\AST\InlineFragmentNode;
-use GraphQL\Language\AST\SelectionNode;
 use GraphQL\Language\AST\SelectionSetNode;
 use GraphQL\Language\Parser;
 use GraphQL\Type\Introspection;
@@ -29,7 +28,10 @@ final readonly class SelectionSet
         $hasTypenameNode = false;
 
         foreach ($node->selections as $selection) {
-            /** @var SelectionNode $selection */
+            if ($selection instanceof InlineFragmentNode) {
+                self::addTypename($selection->selectionSet);
+            }
+
             if ($selection instanceof FieldNode) {
                 if (null !== $selection->selectionSet) {
                     self::addTypename($selection->selectionSet);
@@ -38,13 +40,12 @@ final readonly class SelectionSet
                 $name = $selection->name->value;
                 $alias = $selection->alias?->value;
 
-                if ($name === Introspection::TYPE_NAME_FIELD_NAME && null === $alias) {
+                if (
+                    $alias === Introspection::TYPE_NAME_FIELD_NAME
+                    || ($name === Introspection::TYPE_NAME_FIELD_NAME && null === $alias)
+                ) {
                     $hasTypenameNode = true;
                 }
-            }
-
-            if ($selection instanceof InlineFragmentNode) {
-                self::addTypename($selection->selectionSet);
             }
         }
 
