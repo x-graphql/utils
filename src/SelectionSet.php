@@ -25,7 +25,7 @@ final readonly class SelectionSet
 
     public static function addTypename(SelectionSetNode $node): void
     {
-        $hasTypenameNode = false;
+        $shouldAdd = true;
 
         foreach ($node->selections as $selection) {
             if ($selection instanceof InlineFragmentNode) {
@@ -44,12 +44,12 @@ final readonly class SelectionSet
                     $alias === Introspection::TYPE_NAME_FIELD_NAME
                     || ($name === Introspection::TYPE_NAME_FIELD_NAME && null === $alias)
                 ) {
-                    $hasTypenameNode = true;
+                    $shouldAdd = false;
                 }
             }
         }
 
-        if (false === $hasTypenameNode) {
+        if ($shouldAdd) {
             $node->selections[] = Parser::field(Introspection::TYPE_NAME_FIELD_NAME);
         }
     }
