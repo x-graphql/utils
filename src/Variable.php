@@ -19,7 +19,6 @@ use GraphQL\Language\AST\SelectionSetNode;
 use GraphQL\Language\AST\ValueNode;
 use GraphQL\Language\AST\VariableNode;
 
-
 final readonly class Variable
 {
     /**

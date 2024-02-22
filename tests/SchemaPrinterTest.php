@@ -6,8 +6,8 @@ namespace XGraphQL\Utils\Test;
 
 use GraphQL\Utils\BuildSchema;
 use PHPUnit\Framework\Attributes\DataProvider;
-use XGraphQL\Utils\SchemaPrinter;
 use PHPUnit\Framework\TestCase;
+use XGraphQL\Utils\SchemaPrinter;
 
 class SchemaPrinterTest extends TestCase
 {
